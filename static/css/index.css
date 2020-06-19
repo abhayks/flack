@@ -1,0 +1,27 @@
+.container-feed 
+{ 
+    border: 1px solid red; 
+    height: 150px;
+}
+
+.container-fixed 
+{ 
+    border: 1px solid red; 
+    height: 800px;
+}
+
+.container-messages
+{
+    height: 500px;
+}
+
+.col {
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.scrollit {
+    overflow:scroll;
+}
+
+span:hover { cursor: hand; }

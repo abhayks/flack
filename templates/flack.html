@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Flack</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+</head>
+
+<body>
+    <!-- check if logged in  -->
+    {% if username %}
+    <script type="text/javascript">
+        var user = '{{ username }}';
+        localStorage.username = user;
+    </script>
+    <div class="container">
+        <h1> Harvard Communicator</h1>
+        <h3> Welcome {{ username }} </h3>
+        <div class="row">
+
+            <!-- Feed table -->
+            <div class="container-feed col col-md-12 scrollit">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Messages</th>
+                        </tr>
+                    </thead>
+                    <tbody id="messages">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- These buttons are here for the time being only and will be deleted in the final code  -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+            data-whatever="@mdo">Open modal for @mdo</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+            data-whatever="@fat">Open modal for @fat</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+            data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
+        <div style="width: 50%;">
+            <!-- Channel creation form -->
+
+            <form class="form-inline" id="create_channel_form">
+                <div class="form-group" style="width: 70%;">
+                    <input type="text" autocomplete="off" name="textbox-channel" id="textbox-channel"
+                        placeholder="Enter Channel name" class="form-control" style="width: 99.7%;" required autofocus>
+                </div>
+                <button type="submit" id="create-channel-button" class="btn btn-primary" style="width: 30%;">Create
+                    Channel</button>
+                <!-- Keep this button disabled by default -->
+            </form>
+        </div>
+        <div class="row">
+
+            <div class="container-fixed col col-md-4 scrollit">
+                <table class="table" , id="tab-rooms">
+                    <thead>
+                        <tr>
+                            <th>Rooms</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rooms">
+                    </tbody>
+                </table>
+            </div>
+            <!-- End Room list -->
+            <div class="container-fixed col col-md-8 ">
+                <!-- Chat section -->
+
+                <div id="communicateBox" style="visibility: hidden;">
+
+                    <!-- Channel Name on top -->
+                    <div class="navbar navbar-fixed-top justify-content-between" style="height:80px;">
+                        <div class="col-md-auto bg-dark text-white text-capitalize" id="channelname">
+                            <h2 id="channel_name"></h2>
+                        </div>
+                        <div class="col-md-auto">
+                            <button type="submit" id="leaveChannelbutton" class="btn btn-primary">Leave
+                                Channel</button>
+                        </div>
+
+                    </div>
+                    <div class="container-messages scrollit" id="messagebox" style="height:650px;">
+                        <!-- <div id="messages"></div> -->
+
+                        <div class="card">
+                            <div class="card-body height3">
+                                <ul class="chat-list" id="messagelist">
+                                    <li class="in">
+                                        <div class="chat-body">
+                                            <div class="chat-message">
+                                                <h5>Jimmy Willams</h5>
+                                                <p>Raw denim heard of them tofu master cleanse</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="out">
+                                        <div class="chat-body">
+                                            <div class="chat-message">
+                                                <h5>Serena</h5>
+                                                <p>Next level veard</p>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <form class="form-inline" id="send_message_form">
+                            <div class="form-group" style="width: 80%;">
+                                <input type="text" autocomplete="off" name="textbox-message" id="textbox-message"
+                                    placeholder="Enter message" class="form-control" style="width: 99.7%;" required
+                                    autofocus>
+                            </div>
+                            <button type="submit" id="send-message-button" class="btn btn-primary"
+                                style="width: 15%;">Send</button>
+                            <!-- Keep this button disabled by default -->
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    {% endif %}
+    {% if error %}
+    <script type="text/javascript">
+        var error = '{{ error }}';
+        alert(error);
+    </script>
+    {% endif %}
+    <!-- Modal for getting username -->
+    <div class="modal fade" id="loginModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+        aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post" id="loginModalForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="fname">User name:</label>
+                    <input type="text" id="inputusername" name="inputusername" placeholder="Enter Username" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" id="loginModalButton" class="btn btn-primary">Login</button>
+                </div>
+            </Form>
+        </div>
+    </div>
+
+    <!-- the modal for the user message  -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        data-backdrop="static" data-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Recipient:</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Message:</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="sendPrivateMessage">Send message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- describe the page -->
+
+    <!-- User javascript -->
+    <script src="{{ url_for('static', filename='js/flack.js') }}"> </script>"
+    <!-- JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
