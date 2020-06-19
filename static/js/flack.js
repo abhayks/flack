@@ -20,11 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("In Send Private message");
         let messagetext= document.querySelector('#private-message-text');
         let channel= localStorage.getItem("remoteUser");
-        data = {'msg': messagetext.value,'channel': channel};
+        // var privateChannel=channel.concat("-", username); 
+        // console.log(privateChannel);
+        // data = {'msg': messagetext.value,'channel': channel};
+        // console.log(data);
+        // socket.emit('join-channel', channel);
+        // socket.emit('send-private-message', data);
+        data = {'from': username,'to': channel};
         console.log(data);
-        socket.emit('join-channel', channel);
-        socket.emit('send-private-message', data);
-        messagetext.value="";
+        socket.emit('create-private-channel', data);
+      //  messagetext.value="";
         return false;
     };
 
@@ -35,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this);
         modal.find('.modal-title').text('New message to ' + recipient);
-        localStorage.setItem("remoteUser")=recipient;
+        localStorage.setItem("remoteUser", recipient);
       //  modal.find('.modal-body input').val(recipient)
     })
 
@@ -111,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('send-all-messages', channel);
     });
     socket.on('connect', () => {
+        socket.emit('join-self', username);
         socket.emit('request-all-rooms');
         var channel = localStorage.channel;
         if (channel ){
@@ -139,5 +145,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
          toappend=toappend+' <div class="chat-body"> 	<div class="chat-message text-dark"> 	<h5> <a data-toggle="modal" href="#exampleModal"  data-whatever="'+user+'">' + user +'</a>  <small> ' +message.mtime+  ' </small>  </h5> 	<p> '+ message.msg+ '</p> </div> </div>	</li> ';
          $('#messagelist').append(toappend);
-     });
+    });
+    socket.on('add-private-room', data => {
+        // Here we add teh code to add room depending upon the usernames 
+        // Format  :: data = {'from': username,'to': channel};
+        var fromuser=   "/"+data.from+"/g"; // use this regular expression to search
+        var touser="/"+data.to+"/g"; 
+        console.log("add private room");
+        console.log(fromuser);
+        if(username!= data.to && username!=data.from){
+            return false;
+        }
+        var channelfound=false;
+        // Search in existing rooms if channel to-from exists, if not add it
+        document.querySelectorAll('#btn-join-channel').forEach(button => {
+          //  var existingChannels = button.dataset.channel.split("-");
+            // This code will help to learn Javascript string tokenizer
+            if(button.dataset.channel.match(fromuser)){
+                channelfound=true;
+            }else if (button.dataset.channel.match(touser)){
+                channelfound=true;
+            } 
+            
+        });
+        if(channelfound){
+            alert ("Channel exists, Look in rooms"); 
+        }else{
+            var newchannel=data.to.concat("-"+data.from); 
+            toappend='<tr> <td> <div class="row">  <div class="col-lg">'+   newchannel+' </div> <div class="col-sm">  <button class="btn btn-outline-primary" id="btn-join-channel" data-channel="' + newchannel +  '">  Join   </button> </div> </div></td> </tr>';
+             //console.log(toappend);
+            $('#rooms').append(toappend);
+            code_join_button();
+        }
+    });
+
 });

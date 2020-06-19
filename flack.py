@@ -63,12 +63,36 @@ def createChannel(channel):
         emit("message", "Channel '"+channel+"' created!", broadcast=True)
         emit("show-all-rooms", channels, broadcast=True)
 
+
+@socketio.on("create-private-channel")
+def createPrivateChannel(data):
+    # message = {"username": session.get('username'), "msg" : data["msg"], "mtime": mtime}
+    channel=data["to"]+"-"+data["from"]
+    print("In create private channel " + channel)
+    if channel in privateChannels:
+    # retund non- success
+        emit("error", "Channel exists")
+    else:
+        privateChannels.append(channel)
+        messages[channel]=[]
+        emit("add-private-room", data, broadcast=True)
+
+
+@socketio.on("join-self")
+def join_self(channel):
+    join_room(channel)
+    print("Joning Self " + channel)
+
+
 @socketio.on("join-channel")
 def join_channel(channel):
     #t = time.localtime()
     #current_time = time.strftime("%H:%M:%S", t)
     # TODO :: Only join if the channel existys in channels
     if channel in channels:
+        join_room(channel)
+        emit('join-accepted', channel)
+    if channel in privateChannels:
         join_room(channel)
         emit('join-accepted', channel)
 
