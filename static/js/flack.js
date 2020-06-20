@@ -16,16 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // define all the functions here
     document.querySelector('#sendPrivateMessage').onclick = () => {
-        // Make a message to be sent to remote users
         console.log("In Send Private message");
         let messagetext= document.querySelector('#private-message-text');
         let channel= localStorage.getItem("remoteUser");
-        // var privateChannel=channel.concat("-", username); 
-        // console.log(privateChannel);
-        // data = {'msg': messagetext.value,'channel': channel};
-        // console.log(data);
-        // socket.emit('join-channel', channel);
-        // socket.emit('send-private-message', data);
         data = {'from': username,'to': channel};
         console.log(data);
         socket.emit('create-private-channel', data);
