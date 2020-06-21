@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         data = {'from': username,'to': channel};
         console.log(data);
         socket.emit('create-private-channel', data);
+        $('#exampleModal').modal('hide');
       //  messagetext.value="";
         return false;
     };
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this);
-        modal.find('.modal-title').text('New message to ' + recipient);
+        modal.find('.modal-title').text('Create new channel to ' + recipient);
         localStorage.setItem("remoteUser", recipient);
       //  modal.find('.modal-body input').val(recipient)
     })
@@ -109,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('send-all-messages', channel);
     });
     socket.on('connect', () => {
-        socket.emit('join-self', username);
+        // socket.emit('join-self', username);
         socket.emit('request-all-rooms');
         var channel = localStorage.channel;
         if (channel ){
@@ -117,9 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
             socket.emit('join-channel', channel);
         }
     });
-    socket.on('connected', username => {
-        localStorage.setItem("user", username);
-    });
+    // socket.on('connected', username => {
+    //     localStorage.setItem("user", username);
+    // });
     socket.on('show-all-rooms', data => {
         $('#rooms').empty();
         for (i = 0; i < data.length; ++i) {

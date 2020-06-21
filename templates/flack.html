@@ -19,6 +19,9 @@
         var user = '{{ username }}';
         localStorage.username = user;
     </script>
+     {% else %}
+
+    {% endif %}
     <div class="container">
         <h1> Harvard Communicator</h1>
         <h3> Welcome {{ username }} </h3>
@@ -136,7 +139,7 @@
 
         </div>
     </div>
-    {% endif %}
+   
     {% if error %}
     <script type="text/javascript">
         var error = '{{ error }}';
@@ -167,7 +170,7 @@
     </div>
 
     <!-- the modal for the user message  -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         data-backdrop="static" data-keyboard="false" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

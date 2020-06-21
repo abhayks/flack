@@ -28,11 +28,11 @@ messages = {}
 @app.route("/", methods=['GET', 'POST'])
 def index():
     if session.get('logged_in'):
-        print(session.get('username'))
+        print("Username from session" + session.get('username'))
         return render_template('flack.html', username=session['username'])
     if(request.method == 'POST'):
         username=request.form['inputusername']
-        print (username)
+        print ("loggin in :" +username)
         if username in users:
             # This is error scenario, send it back
             error="Username taken, please enter another"
@@ -47,9 +47,7 @@ def index():
 
 @socketio.on("request-all-rooms")
 def showrooms():
-    print('In request, sending channels back')
-    print(channels)
-    emit("connected", session['username'])
+    # emit("connected", session['username'])
     emit("show-all-rooms", channels)
 
 @socketio.on("create-channel")
@@ -78,10 +76,10 @@ def createPrivateChannel(data):
         emit("add-private-room", data, broadcast=True)
 
 
-@socketio.on("join-self")
-def join_self(channel):
-    join_room(channel)
-    print("Joning Self " + channel)
+# @socketio.on("join-self")
+# def join_self(channel):
+#     join_room(channel)
+#     print("Joning Self " + channel)
 
 
 @socketio.on("join-channel")
